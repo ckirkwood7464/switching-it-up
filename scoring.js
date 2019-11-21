@@ -1,9 +1,17 @@
-function calculatePassingScore(player) {
-  var yards = player.stats.passing.yards / 25
-  var touchdowns = player.stats.passing.touchdowns * 6
-  var interceptions = player.stats.passing.interceptions * -3
+//accept the interceptions value
+//return the calculated score
+function calculateInterceptionScore (interceptions) {
+  return interceptions * -3
+}
 
-  return parseFloat((yards + touchdowns + interceptions).toFixed(2))
+
+
+function calculatePassingScore(player) {
+  var yardScore = player.stats.passing.yards / 25
+  var touchdownScore = player.stats.passing.touchdowns * 6
+  var interceptionScore = player.stats.passing.interceptions * -3
+
+  return parseFloat((yardScore + touchdownScore + interceptionScore).toFixed(2))
 }
 
 function calculateRushingScore(player) {
@@ -34,7 +42,9 @@ function calculateReturnScore(player) {
 
   return parseFloat((kickYards + kickTouchdowns + kickFumbles + puntYards + puntTouchdowns + puntFumbles).toFixed(2))
 }
-
+module.exports.calculateInterceptionScore = calculateInterceptionScore
+module.exports.calculatePassingScore = calculatePassingScore
+module.exports.calculateRushingScore = calculateRushingScore
 module.exports.calculateScore = function(player) {
   switch (player.position) {
       case 'QB':

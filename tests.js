@@ -2,8 +2,48 @@ var mocha = require('mocha')
 var calculateScore = require('./scoring').calculateScore
 var expect = require('chai').expect
 var { describe, it } = mocha
+var calculateInterceptionScore = require('./scoring').calculateInterceptionScore
+var calculatePassingScore = require('./scoring').calculatePassingScore
+var calculateRushingScore = require('./scoring').calculateRushingScore
 
 describe('Scoring', function () {
+  it('calculates the rushing score', () => {
+    var player = {
+      name: 'LeSean McCoy',
+      position: 'RB',
+      team: 'Buffalo',
+      stats: {
+        rushing: { attempts: 18, yards: 103, touchdowns: 2, fumbles: 1 },
+      }
+    }
+    let points = calculateRushingScore(player)
+    expect(points).to.equal(19.3)
+    console.log(points)
+  })
+  
+  it('calculates the interception score by taking away 3 points per interception', () => {
+    //given 1 interception
+    let player = {
+      stats: {
+        passing: {
+          interceptions: 1
+        }
+      }
+    }
+
+    let points = calculateInterceptionScore(player.stats.passing.interceptions)
+    //We expect 3 points to be taken away aka "-3"
+    expect(points).to.equal(-3)
+
+    //given we have 5 interceptions
+    points = calculateInterceptionScore(5)
+
+    //We expect 15 points taken away
+    expect(points).to.equal(-15)
+    expect(points).not.to.equal(10)
+  })
+
+
   it('returns the score for a quarterback', function () {
     var player = {
       name: 'Patrick Mahomes',
@@ -20,6 +60,16 @@ describe('Scoring', function () {
         rushing: { attempts: 3, yards: 22, touchdowns: 1, fumbles: 0 }
       }
     }
+
+    var rushingScore = calculateRushingScore(player)
+
+    console.log(rushingScore)
+
+
+    var passingScore = calculatePassingScore(player)
+
+    expect(passingScore).to.equal(32.52)
+    console.log(passingScore)
 
     var score = calculateScore(player)
 
